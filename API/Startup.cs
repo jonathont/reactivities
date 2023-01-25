@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 using Persistence;
+using MediatR;
 
 namespace API
 {
@@ -47,6 +48,10 @@ namespace API
                         .WithOrigins("http://localhost:3000");
                 });
             });
+
+            services.AddMediatR(typeof (Application.Activities.List.Handler).Assembly);
+            services.AddAutoMapper(typeof (Application.Core.MappingProfiles).Assembly);
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

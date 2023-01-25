@@ -11,22 +11,36 @@ namespace API.Controllers
 {
     public class ActivitiesController : BaseApiController
     {
-        private readonly DataContext _context;
-        public ActivitiesController(DataContext context)
-        {
-            this._context = context;
-        }
 
         [HttpGet]
-        public async Task<ActionResult<List<Activity>>> GetActivities()
+        public async Task<ActionResult<List<Activity>>> GetActivities(CancellationToken ct)
         {            
-            return await this._context.Activities.ToListAsync();
+            return await this.Mediator.Send(new Application.Activities.List.Query(), ct);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Activity>> GetActivity(Guid id)
         {
-            return await this._context.Activities.FindAsync(id);
+            return await this.Mediator.Send(new Application.Activities.Details.Query{ Id = id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateActivity(Activity activity)
+        {
+            return Ok(await this.Mediator.Send(new Application.Activities.Create.Command{Activity = activity}));            
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditActivity(Guid id, Activity activity)
+        {
+            activity.Id = id;
+            return Ok(await Mediator.Send(new Application.Activities.Edit.Command{Activity = activity}));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteActivity(Guid id)
+        {
+            return Ok(await Mediator.Send(new Application.Activities.Delete.Command{ Id = id }));
         }
 
     }
