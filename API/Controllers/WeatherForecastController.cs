@@ -1,4 +1,7 @@
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Writers;
 
 namespace API.Controllers;
 
@@ -29,4 +32,44 @@ public class WeatherForecastController : ControllerBase
         })
         .ToArray();
     }
+
+    public string Test(string input) => input;
+
+    public string Test2() => Test("test string");
+
+    public Func<string, int> Test3() {
+
+        Action<string>? b = (string i) => {};
+        Nullable<int> b2 = 2;
+        
+        return (string i) => 3;
+    }
+
+    private string specie;
+
+    public string Specie => this.specie;
+
+    // public string Specie { 
+    //     get => specie;
+    //     set => this.specie = value;
+    //  }
+
+    public static void s()
+    {
+        var result = QueryCityData("New York City");
+        
+        var city = result.Item1;
+        var pop = result.Item2;
+        var size = result.Item3;
+
+         // Do something with the data.
+    }
+
+    private static (string, int, double) QueryCityData(string name)
+    {
+        if (name == "New York City")
+            return (name, 8175133, 468.48);
+
+        return ("", 0, 0);
+    }    
 }
