@@ -4,42 +4,33 @@ import { Activity } from '../../../app/models/activity';
 import ActivityList from './ActivityList';
 import ActivityDetails from '../details/ActivityDetails';
 import ActivityForm from '../form/ActivityForm';
+import { useStore } from '../../../app/stores/store';
+import { observer } from 'mobx-react-lite';
 
 
 interface Props {
-    activities: Activity[];
-    selectedActivity: Activity | undefined;
-    selectActivity: (id: string) => void;
-    cancelSelectActivity: () => void;
-    createOrEditActivity: (activity: Activity) => void;
-    deleteActivity: (id: string) => void;
-    editMode: boolean;
-    submitting: boolean;
-    openForm: (id: string) => void;
-    closeForm: () => void;
+
 }
 
-export default function ActivityDashboard({ activities, selectedActivity,
-     selectActivity, cancelSelectActivity, createOrEditActivity, deleteActivity, editMode, submitting, openForm, closeForm }: Props) {
+export default observer( function ActivityDashboard() {
+
+    const { activityStore } = useStore();
+    const { selectedActivity, editMode } = activityStore;
 
     return (
 
         <Grid>
             <Grid.Column width="10">
-                <ActivityList activities={ activities } submitting={submitting} selectActivity={ selectActivity } deleteActivity={deleteActivity} />
+                <ActivityList />
             </Grid.Column>
             <Grid.Column width="6">
                 { selectedActivity && !editMode &&
-                <ActivityDetails activity={selectedActivity} 
-                                 cancelSelectActivity={cancelSelectActivity}
-                                 openForm={openForm} /> }
+                <ActivityDetails /> }
                 { editMode &&
-                <ActivityForm closeForm={closeForm} activity={selectedActivity} 
-                              createOrEditActivity={createOrEditActivity}
-                              submitting={submitting}></ActivityForm> }
+                <ActivityForm></ActivityForm> }
             </Grid.Column>
         </Grid>
 
 
     );
-}
+});
