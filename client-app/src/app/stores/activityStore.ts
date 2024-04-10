@@ -28,13 +28,13 @@ export default class ActivityStore {
     }
 
     loadActivities = async () => {
-        
+        this.loadingInitial = true;
+
         try {
 
             const activities = await agent.Activities.list();
             activities.forEach(a => {
-                a.date = a.date.split('T')[0];
-                this.activityMap.set(a.id, a);
+                this.setActivity(a);
             });
             this.setLoadingInitial(false);
 
@@ -45,16 +45,42 @@ export default class ActivityStore {
 
     }
 
+    loadActivity = async (id: string) => {
+        let activity = this.getActivity(id);
+        if (activity)
+            this.selectedActivity = activity;
+        else {
+            this.loadingInitial = true;
+            try {
+                activity = await agent.Activities.details(id);
+                runInAction(() => {
+                    this.setActivity(activity!);
+                    this.selectedActivity = activity;
+                    this.setLoadingInitial(false);
+                });
+            } catch (error) {
+                console.log(error);
+                runInAction(() => {
+                    this.setLoadingInitial(false);
+                });
+            }
+        }
+
+        return activity;
+    }
+
+    private setActivity = (activity: Activity) => {
+        activity.date = activity.date.split('T')[0];
+        this.activityMap.set(activity.id, activity);
+    }
+
+    private getActivity = (id: string) => {
+        return this.activityMap.get(id);
+    }
+
+
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
-    }
-
-    selectActivity = (id: string) => {
-        this.selectedActivity = this.activityMap.get(id);
-    }
-
-    cancelSelectedActivity = () => {
-        this.selectedActivity = undefined;
     }
 
     createActivity = async (activity: Activity) => {
@@ -71,6 +97,8 @@ export default class ActivityStore {
                 this.editMode = false;
                 this.loading = false;
             });
+
+            return activity.id;
         } catch (error) {
             console.log(error);
             runInAction(() => {
@@ -108,12 +136,6 @@ export default class ActivityStore {
             runInAction(() => {
                 //this.activities = this.activities.filter(a => a.id !== id);
                 this.activityMap.delete(id);
-
-                if (id == this.selectedActivity?.id) {
-                    this.cancelSelectedActivity();
-                    this.editMode = false;
-                }
-
                 this.loading = false;
             });
 
@@ -125,20 +147,5 @@ export default class ActivityStore {
             });
         }
     };
-
-    openForm = (id?: string) => {
-        if (id)
-            this.selectActivity(id);
-        else
-            this.cancelSelectedActivity();
-
-        this.editMode = true;
-    }
-
-    closeForm = () => {
-        this.editMode = false;
-    }
-
-
 
 }
