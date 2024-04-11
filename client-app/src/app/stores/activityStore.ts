@@ -18,6 +18,25 @@ export default class ActivityStore {
                     .sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     }
 
+    get groupedActivitiesByDate() {
+        let l = Object.entries(
+            this.activitiesByDate.reduce((activities, activity) => {
+                const date = activity.date;
+                
+                ////activities[date] = activities[date] ? [...activities[date], activity] : [activity];
+
+                if (activities[date])
+                    activities[date].push(activity);
+                else
+                    activities[date] = [activity];
+
+                return activities;
+            }, {} as {[key: string]: Activity[]})
+        );
+
+        return l;
+    }
+
     constructor() {
         makeAutoObservable(this);
 

@@ -6,13 +6,11 @@ import { Link, useParams } from 'react-router-dom';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useNavigate } from 'react-router-dom';
 
-interface Props {
-}
 
 export default observer(function ActivityForm() {
 
     const { activityStore } = useStore();
-    const { selectedActivity, loadActivity, createActivity, updateActivity, loadingInitial, loading } = activityStore;
+    const { loadActivity, createActivity, updateActivity, loadingInitial, loading } = activityStore;
     const { id } = useParams<{id: string}>();
     const navigate = useNavigate();
 

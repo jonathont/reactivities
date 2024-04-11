@@ -1,15 +1,11 @@
 import React, { useEffect } from 'react';
 import { Grid } from 'semantic-ui-react';
-import { Activity } from '../../../app/models/activity';
 import ActivityList from './ActivityList';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
+import ActivityFilters from './ActivityFilters';
 
-
-interface Props {
-
-}
 
 export default observer( function ActivityDashboard() {
 
@@ -33,7 +29,7 @@ export default observer( function ActivityDashboard() {
                 <ActivityList />
             </Grid.Column>
             <Grid.Column width="6">
-                <h2>Activity filter</h2>
+                <ActivityFilters />
             </Grid.Column>
         </Grid>
 

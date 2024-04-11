@@ -2,8 +2,6 @@ import React from 'react';
 import { Button, Container, Menu } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
-interface Props {
-}
 
 export default function NavBar() {
 
