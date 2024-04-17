@@ -4,7 +4,7 @@ import { Container } from 'semantic-ui-react';
 import NavBar from './NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard'
 import { observer } from 'mobx-react-lite';
-import { Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
@@ -15,40 +15,59 @@ import NotFound from '../../features/errors/NotFound';
 
 function App() {
 
-  return (
-    <Fragment>
-      <ToastContainer position='bottom-right' hideProgressBar />
-      
-      <Routes>
-        <Route path='/' element={<HomePage />} />
+    const location = useLocation();
 
-        <Route
-          path={'/*'} element={ 
-            <>
-              <><NavBar /></>
-            
-              <Container style={{ marginTop: '7em' }}>
-          
-              {/* <ActivityDashboard /> */}
-              <Routes>
-                <Route path='activities' element={<ActivityDashboard />} />
-                <Route path='/activities/:id' element={<ActivityDetails />} />
 
-                <Route path='/createActivity' element={<ActivityForm key="create" />} />
-                <Route path='/manage/:id' element={<ActivityForm  key="edit" />} />    
-                <Route path='/errors' element={<TestErrors />} />
-
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+    return (
+      <Fragment>
+        <ToastContainer position='bottom-right' hideProgressBar theme='colored' />
+        { location.pathname === '/' ? <HomePage /> : (
+          <>
+            <NavBar />
+            <Container style={{ marginTop: '7em' }}>
+              <Outlet />
             </Container>
+          </>
 
-            </>
-          } />
-      </Routes>
+        )}
+      </Fragment>
+
+    );
+
+  // return (
+  //   <Fragment>
+  //     <ToastContainer position='bottom-right' hideProgressBar />
+      
+  //     <Routes>
+  //       <Route path='/' element={<HomePage />} />
+
+  //       <Route
+  //         path={'/*'} element={ 
+  //           <>
+  //             <><NavBar /></>
+            
+  //             <Container style={{ marginTop: '7em' }}>
+          
+  //             {/* <ActivityDashboard /> */}
+  //             <Routes>
+  //               <Route path='activities' element={<ActivityDashboard />} />
+  //               <Route path='/activities/:id' element={<ActivityDetails />} />
+
+  //               <Route path='/createActivity' element={<ActivityForm key="create" />} />
+  //               <Route path='/manage/:id' element={<ActivityForm  key="edit" />} />    
+  //               <Route path='/errors' element={<TestErrors />} />
+
+  //               <Route path="*" element={<NotFound />} />
+  //             </Routes>
+  //           </Container>
+
+  //           </>
+  //         } />
+  //     </Routes>
 
 
-    </Fragment>
-  );
+  //   </Fragment>
+  // );
 }
 
 export default observer(App);
