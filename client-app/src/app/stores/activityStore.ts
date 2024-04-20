@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { Activity } from "../models/activity";
 import agent from "../api/agent";
 import { v4 as uuid } from 'uuid';
+import { format } from "date-fns";
 
 
 export default class ActivityStore {
@@ -11,18 +12,18 @@ export default class ActivityStore {
     selectedActivity: Activity | undefined;
     editMode = false;
     loading = false;
-    loadingInitial = true;
+    loadingInitial = false;
     
     get activitiesByDate() {
         return Array.from(this.activityMap.values())
-                    .sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+                    .sort((a, b) => a.date!.getTime() - b.date!.getTime());
     }
 
     get groupedActivitiesByDate() {
         let l = Object.entries(
             this.activitiesByDate.reduce((activities, activity) => {
-                const date = activity.date;
-                
+                const date = format(activity.date!, 'dd MM yyyy');
+
                 ////activities[date] = activities[date] ? [...activities[date], activity] : [activity];
 
                 if (activities[date])
@@ -39,11 +40,6 @@ export default class ActivityStore {
 
     constructor() {
         makeAutoObservable(this);
-
-        // makeObservable(this, {
-        //     title: observable,
-        //     setTitle: action.bound            
-        // });
     }
 
     loadActivities = async () => {
@@ -89,7 +85,7 @@ export default class ActivityStore {
     }
 
     private setActivity = (activity: Activity) => {
-        activity.date = activity.date.split('T')[0];
+        activity.date = new Date(activity.date!);
         this.activityMap.set(activity.id, activity);
     }
 
@@ -110,7 +106,6 @@ export default class ActivityStore {
             await agent.Activities.create(activity);
 
             runInAction(() => {
-                //this.activities.push(activity);
                 this.activityMap.set(activity.id, activity);
                 this.selectedActivity = activity;
                 this.editMode = false;
@@ -132,7 +127,6 @@ export default class ActivityStore {
         try {
             await agent.Activities.update(activity);
             runInAction(() => {
-                //this.activities = [...this.activities.filter(a => a.id !== activity.id), activity];
                 this.activityMap.set(activity.id, activity);
                 this.selectedActivity = activity;
                 this.editMode = false;
@@ -153,7 +147,6 @@ export default class ActivityStore {
             await agent.Activities.delete(id);
 
             runInAction(() => {
-                //this.activities = this.activities.filter(a => a.id !== id);
                 this.activityMap.delete(id);
                 this.loading = false;
             });

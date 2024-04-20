@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Icon, Item, Segment } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
+import { format } from 'date-fns';
 
 
 interface Props {
@@ -10,40 +11,7 @@ interface Props {
 
 export default function ActivityListItem({ activity }: Props) {
 
-    //const { activityStore } = useStore();
-    //const { deleteActivity } = activityStore;
-    
-    //const [target, setTarget] = useState('');
-
-
-    // function handleActivityDelete(e: any, id: string) {
-    //     setTarget(e.currentTarget.name);
-    //     deleteActivity(id);
-    // }
-
-
     return (
-        // <Item.Group divided>
-        //   <Item key={activity.id}>
-        //     <Item.Content>
-        //         <Item.Header as='a'>{ activity.title} </Item.Header>
-        //         <Item.Meta>{ activity.date }</Item.Meta>
-        //         <Item.Description>
-        //             <div>{ activity.description }</div>    
-        //             <div>{ activity.city }, { activity.venue }</div>
-        //         </Item.Description>
-        //         <Item.Extra>
-        //             <Button as={Link} to={`/activities/${activity.id}`}
-        //                     disabled={loading && target === activity.id}                                     
-        //                     floated='right' content='View' color='blue'/>
-        //             <Button 
-        //                 name={activity.id}
-        //                 loading={loading && target === activity.id} disabled={loading && target === activity.id} onClick={(e) => handleActivityDelete(e, activity.id)} floated='right' content='Delete' color='red'/>
-        //             <Label basic content={ activity.category } />
-        //         </Item.Extra>
-        //     </Item.Content>
-        //   </Item>  
-        // </Item.Group>
 
     <Segment.Group>
         <Segment>
@@ -61,8 +29,8 @@ export default function ActivityListItem({ activity }: Props) {
         </Segment>
         <Segment>
             <span>
-                <Icon name='clock'/> {activity.date}
-                <Icon name='marker' /> {activity.venue}
+                <Icon name='clock'/> {format(activity.date!, 'dd MMM yyyy h:mm aa')}
+                <Icon name='marker' style={{marginLeft: '5px'}} /> {activity.venue}
             </span>
         </Segment>
         <Segment secondary>

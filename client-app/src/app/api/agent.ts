@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Activity } from '../models/activity';
 import { toast } from 'react-toastify';
-import { createBrowserRouter } from 'react-router-dom';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
 
@@ -54,7 +53,7 @@ axios.interceptors.response.use(async response => {
                 throw modelStateErrors.flat();
 
             }
-            
+
             break;
         case 401:
             toast.error('unauthorised');
