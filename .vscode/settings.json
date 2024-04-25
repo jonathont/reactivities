@@ -1,0 +1,3 @@
+{
+    "dotnet.inlayHints.enableInlayHintsForParameters": true
+}

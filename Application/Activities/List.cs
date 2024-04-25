@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Application.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,39 +14,34 @@ namespace Application.Activities
     public class List
     {
         
-        public class Query : IRequest<Result<List<Activity>>>
+        public class Query : IRequest<Result<List<ActivityDto>>>
         { }
 
-        public class Handler : IRequestHandler<Query, Result<List<Activity>>>
+        public class Handler : IRequestHandler<Query, Result<List<ActivityDto>>>
         {
-            private readonly ILogger<List> logger;
-
             public DataContext Context { get; }
+            private readonly IMapper _mapper;
 
-            public Handler(DataContext context, ILogger<List> logger)
+            public Handler(DataContext context, IMapper mapper)
             {
+                this._mapper = mapper;
                 this.Context = context;
-                this.logger = logger;
             }
 
-            public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var activities = await this.Context.Activities
+                                        // .Include(a => a.Attendees)
+                                        // .ThenInclude(u => u.AppUser)
+                                        .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider) 
+                                        .ToListAsync(cancellationToken);
 
-                // try
-                // {
-                //     for (var i = 0; i < 10; i++)
-                //     {
-                //         cancellationToken.ThrowIfCancellationRequested();
-                //         await Task.Delay(1000);
-                //         logger.LogInformation($"Task {i}");
-                //     }
-                // }
-                // catch (Exception ex) when (ex is TaskCanceledException)
-                // {
-                //     logger.LogInformation($"Task was cancelled");
-                // }
+                // .ProjectTo is an automapper extension for  cleaner alternative to eager loading (.include)
+                // manually would be done via .select()
 
-                return Result<List<Activity>>.Success(await this.Context.Activities.ToListAsync(cancellationToken));
+                //var activityDtos = _mapper.Map<List<ActivityDto>>(activities);
+
+                return Result<List<ActivityDto>>.Success(activities);
             }
         }
 

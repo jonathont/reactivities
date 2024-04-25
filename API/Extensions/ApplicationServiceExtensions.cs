@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Application.Interfaces;
+using Infrastructure.Security;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Persistence;
 
@@ -37,7 +33,8 @@ namespace API.Extensions
 
             services.AddMediatR(typeof (Application.Activities.List.Handler).Assembly);
             services.AddAutoMapper(typeof (Application.Core.MappingProfiles).Assembly);
-            
+            services.AddScoped<IUserAccessor, UserAccessor>();
+
             // services.Configure<ApiBehaviorOptions>(options =>
             // {
             //     options.InvalidModelStateResponseFactory =

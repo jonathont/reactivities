@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Core;
+using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
@@ -30,13 +28,30 @@ namespace Application.Activities
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
-            public Handler(DataContext dataContext)
+            private readonly IUserAccessor _userAccessor;
+
+            public Handler(DataContext dataContext, IUserAccessor userAccessor)
             {
+                this._userAccessor = userAccessor;
                 this._dataContext = dataContext;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
+
+                if (user == null)
+                    return Result<Unit>.Failure("Unable to find user");
+
+                var attendee = new ActivityAttendee
+                {
+                    AppUser = user,
+                    Activity = request.Activity,
+                    IsHost = true
+                };
+
+                request.Activity.Attendees.Add(attendee);
+
                 this._dataContext.Activities.Add(request.Activity);
 
                 var result = await this._dataContext.SaveChangesAsync() > 0;
