@@ -2,8 +2,16 @@ import React from 'react'
 import { Segment, List, Label, Item, Image } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
+import { Activity } from '../../../app/models/activity';
 
-export default observer(function ActivityDetailedSidebar() {
+
+interface Props {
+    activity: Activity;
+}
+
+export default observer(function ActivityDetailedSidebar({activity: {attendees, host}}: Props) {
+    if (!attendees)
+        return (<></>);
 
     return (
         <>
@@ -15,44 +23,28 @@ export default observer(function ActivityDetailedSidebar() {
                 inverted
                 color='teal'
             >
-                2 people going
+                {attendees.length} {attendees.length == 1 ? 'person' : 'people'} going
             </Segment>
             <Segment attached>
                 <List relaxed divided>
-
-                <Item style={{ position: 'relative' }}>
-                        <Image size='tiny' src={'/assets/user.png'} />
+                    {attendees.map(a => (
+                    <Item key={a.username} style={{ position: 'relative' }}>
+                        <Image size='tiny' src={a.image || '/assets/user.png'} />
                         <Item.Content verticalAlign='middle'>
+                            {a.username === host?.username && 
                             <Label 
                                 style={{ position: 'absolute' }}
                                 color='orange'
                                 ribbon='right'>Host</Label>
+                            }
 
                             <Item.Header as='h3'>
-                                <Link to='#'>Tony</Link>
+                                <Link to={`/profiles/${a.username}`}>{a.displayName}</Link>
                             </Item.Header>
                             <Item.Extra style={{color: 'orange'}}>Following</Item.Extra>
                         </Item.Content>
-                    </Item>
-
-                    <Item style={{ position: 'relative' }}>
-                        <Image size='tiny' src={'/assets/user.png'} />
-                        <Item.Content verticalAlign='middle'>
-                            <Item.Header as='h3'>
-                                <Link to='#'>Greg</Link>
-                            </Item.Header>
-                            <Item.Extra style={{color: 'orange'}}>Following</Item.Extra>
-                        </Item.Content>
-                    </Item>
-
-                    <Item style={{ position: 'relative' }}>
-                        <Image size='tiny' src={'/assets/user.png'} />
-                        <Item.Content verticalAlign='middle'>
-                            <Item.Header as='h3'>
-                                <Link to='#'>Sally</Link>
-                            </Item.Header>
-                        </Item.Content>
-                    </Item>
+                     </Item>
+                    ))}
                 </List>
             </Segment>
         </>
