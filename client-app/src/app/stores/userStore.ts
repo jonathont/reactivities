@@ -33,14 +33,14 @@ export default class UserStore {
         } catch (error) {
             throw error;
         }
-    }
+    };
 
     logout = async () => {
         store.commonStore.setToken(null);
         window.localStorage.removeItem('jwt');
         this.user = null;
         router.navigate('/');
-    }
+    };
 
     getUser = async () => {
         try {
@@ -49,7 +49,7 @@ export default class UserStore {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     register = async (creds: UserFormValues) => {
         try {
@@ -67,6 +67,11 @@ export default class UserStore {
         } catch (error) {
             throw error;
         }
-    }
+    };
+
+    setImage = (image: string) => {
+        if (this.user)
+            this.user.image = image;
+    };
 
 }
