@@ -55,7 +55,7 @@ export default observer(function ProfilePhotos({ profile }: Props) {
                                                 color='green'
                                                 content='Main'
                                                 name={photo.id}
-                                                disabled={photo.isMain || loading && target !== 'main' + photo.id}
+                                                disabled={photo.isMain || (loading && target !== 'main' + photo.id)}
                                                 loading={target === 'main' + photo.id && loading}
                                                 onClick={e => handleSetMainPhoto(photo, e)}
                                             />
@@ -64,7 +64,7 @@ export default observer(function ProfilePhotos({ profile }: Props) {
                                                 color='red' 
                                                 icon='trash' 
                                                 name={photo.id}
-                                                disabled={photo.isMain || loading && target !== photo.id}
+                                                disabled={photo.isMain || (loading && target !== photo.id)}
                                                 loading={target === photo.id && loading}
                                                 onClick={e => handleDeletePhoto(photo, e)}
                                                 />

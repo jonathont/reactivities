@@ -9,7 +9,7 @@ interface Props {
     uploadPhoto: (file: Blob) => void;
 }
 
-export default observer(function PhotoUploadWidget({loading, uploadPhoto}: Props) {
+export default observer(function PhotoUploadWidget({ loading, uploadPhoto }: Props) {
 
     const [files, setFiles] = useState<any[]>([]);
     const [cropper, setCropper] = useState<Cropper>();
@@ -33,33 +33,35 @@ export default observer(function PhotoUploadWidget({loading, uploadPhoto}: Props
         <Grid>
             <Grid.Column width={4}>
                 <Header sub color='teal' content='Step 1 - Add Photo' />
-                <PhotoWidgetDropzone setFiles={setFiles}/>
+                <PhotoWidgetDropzone setFiles={setFiles} />
             </Grid.Column>
-            
-            <Grid.Column width={1} />
-            
+
+            <Grid.Column width={2} />
+
             <Grid.Column width={4}>
                 <Header sub color='teal' content='Step 2 - Resize image' />
                 {files && files.length > 0 &&
-                // <Image src={files[0].preview} />
-                <PhotoWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />
+                    // <Image src={files[0].preview} />
+                    <PhotoWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />
                 }
             </Grid.Column>
 
-            <Grid.Column width={1} />
+            <Grid.Column width={2} />
 
             <Grid.Column width={4}>
                 <Header sub color='teal' content='Step 2 - Preview & Upload' />
                 <>
-                    <div className='image-preview' style={{minHeight: 200, overflow: 'hidden', aspectRatio: 1}}></div>
+                    <div className='image-preview' style={{ overflow: 'hidden', aspectRatio: 1 }}></div>
                     {files && files.length > 0 &&
-                    <Button.Group widths={2}>
-                        <Button onClick={onCrop} loading={loading} positive icon='check' />
-                        <Button onClick={() => setFiles([])} disabled={loading} icon='close' />
-                    </Button.Group>
+                        <div className='ui two buttons'>
+                            <Button.Group widths={2}>
+                                <Button onClick={onCrop} loading={loading} positive icon='check' />
+                                <Button onClick={() => setFiles([])} disabled={loading} icon='close' />
+                            </Button.Group>
+                        </div>
                     }
                 </>
-            </Grid.Column>                        
+            </Grid.Column>
         </Grid>
     );
 });

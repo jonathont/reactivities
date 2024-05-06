@@ -105,6 +105,7 @@ const Account = {
 
 const Profiles = {
     get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+    put: (profile: Partial<Profile>) => requests.put<Profile>('/profiles', profile),
     uploadPhoto: (file: Blob) => {
         let formData = new FormData();
         formData.append('File', file);

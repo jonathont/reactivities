@@ -7,10 +7,6 @@ import { useStore } from '../../app/stores/store';
 import LoadingComponent from '../../app/layout/LoadingComponent';
 import { observer } from 'mobx-react-lite';
 
-interface Props {
-    username: string;
-}
-
 export default observer(function ProfilePage() {
 
     const {username} = useParams<{username: string}>();

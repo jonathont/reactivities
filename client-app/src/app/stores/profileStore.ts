@@ -34,6 +34,16 @@ export default class ProfileStore {
         }
     };
 
+
+    updateProfile = async (profile: Partial<Profile>) => {
+        if (this.profile) {
+            await agent.Profiles.put(profile);
+            this.profile.displayName = profile.displayName || '';
+            this.profile.bio = profile.bio || '';
+        }
+    }
+
+
     uploadPhoto = async (file: Blob) => {
         this.uploading = true;
 
@@ -64,7 +74,7 @@ export default class ProfileStore {
         this.loading = true;
 
         try {
-            const response = await agent.Profiles.deletePhoto(photo.id);
+            await agent.Profiles.deletePhoto(photo.id);
             
             runInAction(() => {
                 if (this.profile) {

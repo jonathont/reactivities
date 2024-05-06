@@ -219,4 +219,16 @@ export default class ActivityStore {
 
     }
 
+    updateProfileMainImage = (username: string, imageUrl: string) => {
+        this.activityMap.forEach((a, key) => {
+            if (a.hostUsername == username && a.host)
+                a.host.image = imageUrl;
+            if (a.attendees)
+                a.attendees.forEach(at => {
+                    if (at.username == username)
+                        at.image = imageUrl;
+                });
+        });
+    };
+
 }

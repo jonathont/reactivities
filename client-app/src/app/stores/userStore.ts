@@ -70,8 +70,10 @@ export default class UserStore {
     };
 
     setImage = (image: string) => {
-        if (this.user)
+        if (this.user) {
             this.user.image = image;
+            store.activityStore.updateProfileMainImage(this.user.username, image);
+        }
     };
 
 }
