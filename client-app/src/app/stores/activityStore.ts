@@ -115,11 +115,11 @@ export default class ActivityStore {
         const attendee = new Profile(user!);
         
         try {
+            activity.id = uuid();
             await agent.Activities.create(activity);
             const newActivity = new Activity(activity);
             newActivity.hostUsername = user!.username;
             newActivity.attendees = [attendee];
-            newActivity.id = uuid();
 
             this.setActivity(newActivity);
 
@@ -230,5 +230,9 @@ export default class ActivityStore {
                 });
         });
     };
+
+    clearSelectedActivity = () => {
+        this.selectedActivity = undefined;
+    }
 
 }

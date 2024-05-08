@@ -24,18 +24,23 @@ namespace API.Extensions
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddCors(opt => {
-                opt.AddPolicy("CorsPolicy", policy => {
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
                     policy.AllowAnyMethod()
                         .AllowAnyHeader()
+                        .AllowCredentials()
                         .WithOrigins("http://localhost:3000");
                 });
             });
 
-            services.AddMediatR(typeof (Application.Activities.List.Handler).Assembly);
-            services.AddAutoMapper(typeof (Application.Core.MappingProfiles).Assembly);
+            services.AddMediatR(typeof(Application.Activities.List.Handler).Assembly);
+            services.AddAutoMapper(typeof(Application.Core.MappingProfiles).Assembly);
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+
+            services.AddSignalR();
 
             // services.Configure<ApiBehaviorOptions>(options =>
             // {
@@ -46,6 +51,6 @@ namespace API.Extensions
 
             return services;
         }
-        
+
     }
 }
