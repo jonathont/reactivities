@@ -9,7 +9,7 @@ interface Props {
     activity: Activity;
 }
 
-export default observer(function ActivityDetailedSidebar({activity: {attendees, host}}: Props) {
+export default observer(function ActivityDetailedSidebar({ activity: { attendees, host } }: Props) {
     if (!attendees)
         return (<></>);
 
@@ -28,22 +28,24 @@ export default observer(function ActivityDetailedSidebar({activity: {attendees, 
             <Segment attached>
                 <List relaxed divided>
                     {attendees.map(a => (
-                    <Item key={a.username} style={{ position: 'relative' }}>
-                        <Image size='tiny' src={a.image || '/assets/user.png'} />
-                        <Item.Content verticalAlign='middle'>
-                            {a.username === host?.username && 
-                            <Label 
-                                style={{ position: 'absolute' }}
-                                color='orange'
-                                ribbon='right'>Host</Label>
-                            }
+                        <Item key={a.username} style={{ position: 'relative' }}>
+                            <Image size='tiny' src={a.image || '/assets/user.png'} />
+                            <Item.Content verticalAlign='middle'>
+                                {a.username === host?.username &&
+                                    <Label
+                                        style={{ position: 'absolute' }}
+                                        color='orange'
+                                        ribbon='right'>Host</Label>
+                                }
 
-                            <Item.Header as='h3'>
-                                <Link to={`/profiles/${a.username}`}>{a.displayName}</Link>
-                            </Item.Header>
-                            <Item.Extra style={{color: 'orange'}}>Following</Item.Extra>
-                        </Item.Content>
-                     </Item>
+                                <Item.Header as='h3'>
+                                    <Link to={`/profiles/${a.username}`}>{a.displayName}</Link>
+                                </Item.Header>
+                                {a.following &&
+                                    <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>
+                                }
+                            </Item.Content>
+                        </Item>
                     ))}
                 </List>
             </Segment>

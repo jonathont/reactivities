@@ -1,7 +1,7 @@
 
 # Reactivities
 
-A small web application for creating and managing shared activities, created as a means to learn React.
+A small web application for creating and managing shared activities, created as a means to learn React following Clean Architecture and CQRS.
 
 
 ## Run Locally
