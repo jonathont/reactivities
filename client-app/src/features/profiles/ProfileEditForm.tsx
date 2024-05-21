@@ -1,13 +1,12 @@
 import React from 'react';
 import { ErrorMessage, Form, Formik } from 'formik';
 import MyTextInput from '../../app/common/form/MyTextInput';
-import { Button, Header, Label } from 'semantic-ui-react';
+import { Button, Label } from 'semantic-ui-react';
 import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import * as Yup from 'yup';
 import { Profile } from '../../app/models/profile';
 import MyTextArea from '../../app/common/form/MyTextArea';
-import { runInAction } from 'mobx';
 
 interface Props {
     profile: Profile;

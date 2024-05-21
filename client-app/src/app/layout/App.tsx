@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import { useStore } from '../stores/store';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
+import ScrollToTop from './ScrollToTop';
 
 
 
@@ -29,6 +30,7 @@ function App() {
 
     return (
       <Fragment>
+        <ScrollToTop />        
         <ToastContainer position='bottom-right' hideProgressBar theme='colored' />
         <ModalContainer />
         

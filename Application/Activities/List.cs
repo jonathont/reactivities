@@ -11,10 +11,12 @@ namespace Application.Activities
     public class List
     {
         
-        public class Query : IRequest<Result<List<ActivityDto>>>
-        { }
+        public class Query : IRequest<Result<PagedList<ActivityDto>>>
+        { 
+            public ActivityParams Params { get; set; }
+        }
 
-        public class Handler : IRequestHandler<Query, Result<List<ActivityDto>>>
+        public class Handler : IRequestHandler<Query, Result<PagedList<ActivityDto>>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -27,14 +29,26 @@ namespace Application.Activities
                 this._context = context;
             }
 
-            public async Task<Result<List<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activities = await this._context.Activities
+                var query = this._context.Activities
+                                        .Where(a => a.Date >= request.Params.StartDate)
+                                        .OrderBy(d => d.Date)
                                         .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, 
                                             new { currentUsername = _userAccessor.GetUsername()})
-                                        .ToListAsync(cancellationToken);
+                                        .AsQueryable();
 
-                return Result<List<ActivityDto>>.Success(activities);
+                if (request.Params.IsGoing && !request.Params.IsHost)
+                    query = query.Where(a => a.Attendees.Any(t => t.Username == _userAccessor.GetUsername()));
+                else if (request.Params.IsHost)
+                    query = query.Where(a => a.HostUsername == _userAccessor.GetUsername());
+
+                var activities = await PagedList<ActivityDto>.CreateAsync(query, 
+                                                                 request.Params.PageNumber, 
+                                                                 request.Params.PageSize, 
+                                                                 cancellationToken);
+                                                                 
+                return Result<PagedList<ActivityDto>>.Success(activities);
             }
         }
 

@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using API.Extensions;
 using Application.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace API.Controllers 
+namespace API.Controllers
 {
 
     [ApiController]
@@ -18,6 +14,16 @@ namespace API.Controllers
 
         protected IMediator Mediator =>  _mediator ??= HttpContext.RequestServices.GetService<IMediator>()!;
 
+
+        protected ActionResult HandleResult<T, A>(Result<T>? result) where T : PagedList<A>
+        {
+            if (result != null && result.IsSuccess && result.Value != null)
+            {
+                Response.AddPaginationHeader(result.Value.CurrentPage, result.Value.PageSize, result.Value.TotalCount, result.Value.TotalPages);
+            }
+
+            return this.HandleResult(result);
+        }
 
         protected ActionResult HandleResult<T>(Result<T>? result)
         {
@@ -30,6 +36,7 @@ namespace API.Controllers
 
             return BadRequest(result.Error);            
         }
+
     }
 
 }

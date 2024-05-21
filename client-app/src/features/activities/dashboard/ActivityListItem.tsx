@@ -52,7 +52,7 @@ export default observer(function ActivityListItem({ activity }: Props) {
                 <Icon name='marker' style={{marginLeft: '5px'}} /> {activity.venue}
             </span>
         </Segment>
-        <Segment secondary>
+        <Segment secondary style={{minHeight: '69.8px'}}>
             { activity.attendees && 
             <ActivityListItemAttendee attendees={activity.attendees} />
             }
