@@ -1,9 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Disabled for lower memory use on fly.io -->
+    <ServerGarbageCollection>false</ServerGarbageCollection>
   </PropertyGroup>
 
   <ItemGroup>

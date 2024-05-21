@@ -45,9 +45,12 @@ namespace API
 
             if (env.IsDevelopment())
             {
+                Console.WriteLine("Mode: Development");
                 //app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
+            } else {
+                Console.WriteLine("Mode: Production");
             }
 
             //app.UseHttpsRedirection();

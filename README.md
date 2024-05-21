@@ -3,6 +3,10 @@
 
 A small web application for creating and managing shared activities, created as a means to learn React following Clean Architecture and CQRS.
 
+## Demo
+
+A live demo is available here: https://reactivitiesdemo.fly.dev/
+Create an account or login: bob@test.com / Pa$$w0rd
 
 ## Run Locally
 
