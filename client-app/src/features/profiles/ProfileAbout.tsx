@@ -12,13 +12,13 @@ interface Props {
 
 export default observer(function ProfileAbout({ profile }: Props) {
 
-    let {profileStore} = useStore();
+    let { profileStore } = useStore();
 
     let [isEditing, setIsEditing] = useState<boolean>(false);
 
     let updateProfile = (profile: Partial<Profile>): Promise<void> => {
         var update = profileStore.updateProfile(profile);
-        
+
         update.then(() => runInAction(() => setIsEditing(false)));
 
         return update;
@@ -27,21 +27,22 @@ export default observer(function ProfileAbout({ profile }: Props) {
     return (
         <Card fluid>
             <CardContent>
-                <Button
-                    floated='right'
-                    basic
-                    style={{ marginBottom: 10 }}
-                    onClick={() => setIsEditing(!isEditing)}>
-                    {isEditing ? 'Cancel' : 'Edit Profile'}
-                </Button>
-
+                {profileStore.isCurrentUser && (
+                    <Button
+                        floated='right'
+                        basic
+                        style={{ marginBottom: 10 }}
+                        onClick={() => setIsEditing(!isEditing)}>
+                        {isEditing ? 'Cancel' : 'Edit Profile'}
+                    </Button>
+                )}
                 <CardHeader >
                     <div className="header">
                         <Icon name='user' /> {`About ${profile?.displayName}`}
                     </div>
                 </CardHeader>
                 {!isEditing &&
-                    <pre style={{whiteSpace: 'pre-wrap'}}>{profile?.bio || "Bob hasn't written anything here yet"}</pre>
+                    <pre style={{ whiteSpace: 'pre-wrap' }}>{profile?.bio || `${profile?.displayName} hasn't written anything here yet`}</pre>
                 }
                 {isEditing &&
                     <ProfileEditForm profile={profile} updateProfile={updateProfile} />

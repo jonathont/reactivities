@@ -57,7 +57,8 @@ namespace API
                                                          "data:"))
                 .FormActions(s => s.Self())
                 .FrameAncestors(s => s.Self())
-                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com"))
+                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com",
+                                                          "blob:"))
                 .ScriptSources(s => s.Self())
             );
 
